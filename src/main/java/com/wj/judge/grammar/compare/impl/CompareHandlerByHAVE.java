@@ -1,5 +1,6 @@
 package com.wj.judge.grammar.compare.impl;
 
+import cn.hutool.json.JSONUtil;
 import com.wj.judge.grammar.compare.BaseCompareHandler;
 
 public class CompareHandlerByHAVE extends BaseCompareHandler {
@@ -8,6 +9,6 @@ public class CompareHandlerByHAVE extends BaseCompareHandler {
 
     @Override
     public boolean compare(Object param, String value) {
-        return false;
+        return JSONUtil.parseArray(value).contains(param);
     }
 }
