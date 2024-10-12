@@ -5,16 +5,18 @@ import com.wj.judge.grammar.objassert.ObjAssertBaseListener;
 import com.wj.judge.grammar.objassert.ObjAssertParser;
 import com.wj.judge.grammar.utils.CompareOp;
 import com.wj.judge.grammar.utils.CompareUtils;
-import com.wj.judge.grammar.utils.GrammarErrException;
 import com.wj.judge.grammar.utils.LogicOp;
 import lombok.Data;
-import ognl.Ognl;
-import ognl.OgnlException;
+import lombok.experimental.Accessors;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
+/**
+ * 语法解析处理器
+ */
 @Data
+@Accessors(chain = true)
 public class ObjAssertListenerImpl extends ObjAssertBaseListener {
 
 
@@ -32,19 +34,11 @@ public class ObjAssertListenerImpl extends ObjAssertBaseListener {
         this.assertFlag = ctx.expr().exprValue;
     }
 
-    private Object getValue(String key){
-        Object obj = null;
-        try {
-            obj = Ognl.getValue(key, instance);
-        } catch (OgnlException e) {
-            throw new GrammarErrException("Ognl取值失败：",e);
-        }
-        return obj;
-    }
+
 
     @Override
     public void exitLableSingle(ObjAssertParser.LableSingleContext ctx) {
-        Object param = getValue(ctx.PARAM().getText());
+        Object param = JudgeUtils.getValue(ctx.PARAM().getText(),instance);
         String value = ctx.VALUE().getText().replace("\"","");//去掉参数标识符
         value = value.replace("#","");//去掉参数标识符
         CompareOp compare = CompareOp.fromString(ctx.compare().op.getText());
@@ -55,7 +49,7 @@ public class ObjAssertListenerImpl extends ObjAssertBaseListener {
 
     @Override
     public void exitLableJudge(ObjAssertParser.LableJudgeContext ctx) {
-        Object param = getValue(ctx.PARAM().getText());
+        Object param = JudgeUtils.getValue(ctx.PARAM().getText(),instance);
         if (ctx.JUDGE().getText().toLowerCase().equals("empty")) {
             if (param==null){
                 ctx.exprSingleValue = true;

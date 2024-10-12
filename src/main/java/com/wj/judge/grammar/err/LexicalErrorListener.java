@@ -1,5 +1,6 @@
 package com.wj.judge.grammar.err;
 
+import lombok.Getter;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.Lexer;
 import org.antlr.v4.runtime.RecognitionException;
@@ -13,9 +14,10 @@ import java.util.List;
 /**
  * 词法错误监听器
  */
+@Getter
 public class LexicalErrorListener extends BaseErrorListener {
 
-    private List<String> errMessage = new ArrayList<>(0);
+    private List<GrammarErrorBo> errMessage = new ArrayList<>(0);
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
@@ -23,12 +25,15 @@ public class LexicalErrorListener extends BaseErrorListener {
         String text = lexer._input.getText(Interval.of(lexer._tokenStartCharIndex, lexer._input.index()));
         String errorDisplay = lexer.getErrorDisplay(text);
         if (StringUtils.isNotBlank(errorDisplay)){
-            String message = String.format("[词法错误] 行%s 列%s 错误词: %s", line, charPositionInLine, errorDisplay);
-            errMessage.add(message);
+            //String message = String.format("[词法错误] 行%s 列%s 错误词: %s", line, charPositionInLine, errorDisplay);
+            //errMessage.add(message);
+            errMessage.add(new GrammarErrorBo()
+                    .setLine(line)
+                    .setCharPositionInLine(charPositionInLine)
+                    .setOffendingSymbol(errorDisplay)
+                    .setMsg(msg)
+                    .setException(e));
         }
     }
 
-    public List<String> getErrMessage() {
-        return errMessage;
-    }
 }
