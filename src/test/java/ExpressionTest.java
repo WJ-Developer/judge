@@ -19,6 +19,11 @@ public class ExpressionTest {
         System.err.println("输出结果："+ Judge.verdictTrack(expr,map));
     }
 
+    public void test() throws GrammarException {
+        final String expr = "age > 12 or name = \"张三\" ";
+        System.err.println("输出结果："+ Judge.verdictTrack(expr,new Obj().setAge(20).setName("张三")));
+    }
+
 }
 @Data
 @Accessors(chain = true)
