@@ -1,10 +1,10 @@
 package com.wj.judge.api;
 
 import cn.hutool.core.collection.CollUtil;
+import com.wj.judge.grammar.compare.Compare;
 import com.wj.judge.grammar.objassert.ObjAssertBaseListener;
 import com.wj.judge.grammar.objassert.ObjAssertParser;
 import com.wj.judge.grammar.utils.CompareOp;
-import com.wj.judge.grammar.utils.CompareUtils;
 import com.wj.judge.grammar.utils.LogicOp;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -42,7 +42,7 @@ public class ObjAssertListenerImpl extends ObjAssertBaseListener {
         String value = ctx.VALUE().getText().replace("\"","");//去掉参数标识符
         value = value.replace("#","");//去掉参数标识符
         CompareOp compare = CompareOp.fromString(ctx.compare().op.getText());
-        ctx.exprSingleValue = CompareUtils.compare(param,compare,value);
+        ctx.exprSingleValue = Compare.compare(param,compare,value);
         String message = String.format("[比较参数] %s %s %s -> %s", param, compare, value,ctx.exprSingleValue);
         messages.add(message);
     }

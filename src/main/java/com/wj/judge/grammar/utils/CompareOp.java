@@ -21,9 +21,11 @@ public enum CompareOp {
 
     List<String> symbols;
 
+
     CompareOp(String... symbol){
         this.symbols = CollUtil.newArrayList(symbol);
     }
+
     public static CompareOp fromString(String symbol) {
         symbol = symbol.toLowerCase();//转小写
         for(CompareOp compare : values()) {
