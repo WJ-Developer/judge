@@ -13,7 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.List;
 
 /**
- * 语法解析处理器
+ * 语法解析处理器实现
  */
 @Data
 @Accessors(chain = true)
@@ -27,15 +27,22 @@ public class ObjAssertListenerImpl extends ObjAssertBaseListener {
     private boolean assertFlag;
 
     /** 运算比较的过程信息 */
-    private List<String> messages = CollUtil.newArrayList();
+    private List<String> trackMessages = CollUtil.newArrayList();
 
+    /**
+     * 根语法处理
+     * @param ctx the parse tree
+     */
     @Override
     public void exitParse(ObjAssertParser.ParseContext ctx) {
         this.assertFlag = ctx.expr().exprValue;
     }
 
 
-
+    /**
+     * 参数比较逻辑处理
+     * @param ctx the parse tree
+     */
     @Override
     public void exitLableSingle(ObjAssertParser.LableSingleContext ctx) {
         Object param = JudgeUtils.getValue(ctx.PARAM().getText(),instance);
@@ -44,9 +51,13 @@ public class ObjAssertListenerImpl extends ObjAssertBaseListener {
         CompareOp compare = CompareOp.fromString(ctx.compare().op.getText());
         ctx.exprSingleValue = Compare.compare(param,compare,value);
         String message = String.format("[比较参数] %s %s %s -> %s", param, compare, value,ctx.exprSingleValue);
-        messages.add(message);
+        trackMessages.add(message);
     }
 
+    /**
+     * 参数判断逻辑处理
+     * @param ctx the parse tree
+     */
     @Override
     public void exitLableJudge(ObjAssertParser.LableJudgeContext ctx) {
         Object param = JudgeUtils.getValue(ctx.PARAM().getText(),instance);
@@ -68,7 +79,7 @@ public class ObjAssertListenerImpl extends ObjAssertBaseListener {
             }
         }
         String message = String.format("[数据判定] %s %s -> %s", param, ctx.JUDGE().getText(),ctx.exprSingleValue);
-        messages.add(message);
+        trackMessages.add(message);
     }
 
     /**
@@ -88,9 +99,6 @@ public class ObjAssertListenerImpl extends ObjAssertBaseListener {
         }
         ctx.exprValue = flag;
     }
-
-
-
 
     /**
      * 分组结果判断处理

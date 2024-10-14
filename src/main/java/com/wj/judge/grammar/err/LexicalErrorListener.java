@@ -25,8 +25,6 @@ public class LexicalErrorListener extends BaseErrorListener {
         String text = lexer._input.getText(Interval.of(lexer._tokenStartCharIndex, lexer._input.index()));
         String errorDisplay = lexer.getErrorDisplay(text);
         if (StringUtils.isNotBlank(errorDisplay)){
-            //String message = String.format("[词法错误] 行%s 列%s 错误词: %s", line, charPositionInLine, errorDisplay);
-            //errMessage.add(message);
             errMessage.add(new GrammarErrorBo()
                     .setLine(line)
                     .setCharPositionInLine(charPositionInLine)

@@ -33,7 +33,7 @@ public class Judge {
         ObjAssertParser.ParseContext parseTree = JudgeUtils.parserTree(expression);
         ObjAssertListenerImpl listener = new ObjAssertListenerImpl().setInstance(instance);
         new ParseTreeWalker().walk(listener, parseTree); // 使用监听器遍历解析树
-        for (String message : listener.getMessages()) {
+        for (String message : listener.getTrackMessages()) {
             System.out.println(message);
             log.info(message);
         }

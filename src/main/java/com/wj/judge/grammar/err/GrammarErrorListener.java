@@ -18,7 +18,6 @@ public class GrammarErrorListener extends BaseErrorListener {
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
-        String message = String.format("[语法错误]行%s列%s: %s. 错误原因:%s", line, charPositionInLine, offendingSymbol, msg);
         errMessage.add(new GrammarErrorBo()
                 .setLine(line)
                 .setCharPositionInLine(charPositionInLine)
